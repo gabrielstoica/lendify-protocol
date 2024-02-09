@@ -1,66 +1,30 @@
-## Foundry
+## Foundry-based LendifyProtocol smart contracts
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
-
-Foundry consists of:
-
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
-
-## Documentation
-
-https://book.getfoundry.sh/
+A simple lending & borrowing smart contract where end-users can collateralize an NFT to borrow a fixed USDC loan amount.
 
 ## Usage
 
-### Build
+### Install dependencies
 
-```shell
-$ forge build
+```
+forge install
 ```
 
-### Test
+### Deploy and verify contracts on Linea
+
+Create a `.env` file using the `.env.example` file provided in this folder and add your private key. Make sure to add a `0x` in front of your key to convert it to a hex.
+
+Note: To deploy on either Linea Mainnet or Linea Goerli testnet, you will need an `Infura API Key` to access the RPC endpoints. Follow [this link](https://www.infura.io/networks/ethereum/linea) to get an API key and add assign it to the `INFURA_API_KEY` variable in the `.env` file.
+
+Similarly, to verify the `LendifyProtocol` smart contract on `Lineascan`, you need an API key. You can get an API key from [here](https://lineascan.build/) - for both Linea Mainnet and Goerli testnet by creating an account. Once you have it, assign it to the `LINEA_EXPLORER_API_KEY` variable in the `.env` file.
 
 ```shell
-$ forge test
+$ forge script script/Deploy.s.sol --broadcast --verify --rpc-url linea-testnet
 ```
 
-### Format
+### Build and Test
 
-```shell
-$ forge fmt
 ```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
+forge build
+forge test
 ```

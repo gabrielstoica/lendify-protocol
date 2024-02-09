@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## LendifyProtocol
+
+A simple lending & borrowing protocol where end-users can collateralize NFTs to borrow a fixed USDC loan amount.
+
+![Logo](./assets/repository_logo.png)
+
+## Dependencies
+
+This project is built upon the Consensys product suite such as [Infura](https://www.infura.io/) and [MetaMask SDK](https://docs.metamask.io/wallet/how-to/use-sdk/). In order to run it, several configurations are required.
+
+Create a `.env` file using the `.env.example` file provided in this folder and update all variables accordingly:
+
+- `NEXT_PUBLIC_INFURA_DEDICATED_IPFS_GATEWAY` is an optional dedicated IPFS gateway to retrieve the NFTs metadata. To learn more please follow [this link](https://docs.infura.io/api/networks/ipfs/how-to/access-ipfs-content/dedicated-gateways).
+- `NEXT_PUBLIC_INFURA_API_KEY` is mandatory to make API calls through the MetaMask SDK. To learn more please follow [this guide](https://docs.infura.io/api/getting-started).
 
 ## Getting Started
 
-First, run the development server:
+First, install all dependencies:
 
-```bash
+```
+npm install
+```
+
+After, run the development server:
+
+```
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Other dependencies
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font, [`shadcn-ui`](https://ui.shadcn.com/) for styling and [`tailwindui`](https://tailwindui.com/).

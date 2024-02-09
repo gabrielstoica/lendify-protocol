@@ -1,8 +1,8 @@
 "use client";
 
 import { Web3Provider } from "@/context/MetamaskContext";
-import { MetaMaskProvider, useSDK } from "@metamask/sdk-react";
-import { FC, PropsWithChildren, useState } from "react";
+import { MetaMaskProvider } from "@metamask/sdk-react";
+import { FC, PropsWithChildren } from "react";
 
 const ClientLayout: FC<PropsWithChildren<{}>> = ({ children }) => {
   return (

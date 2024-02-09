@@ -15,7 +15,7 @@ const ClientLayout: FC<PropsWithChildren<{}>> = ({ children }) => {
         },
         // Use Infura API to make read-only JSON-RPC requests
         // To secure this API Key, see https://docs.infura.io/dashboard/secure-an-api
-        infuraAPIKey: "3d412e571202496ba31cbce9be31a649",
+        infuraAPIKey: process.env.NEXT_PUBLIC_INFURA_API_KEY,
       }}
     >
       <Web3Provider>{children}</Web3Provider>

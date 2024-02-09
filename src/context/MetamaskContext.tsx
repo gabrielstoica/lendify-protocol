@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useSDK } from "@metamask/sdk-react";
-import { ethers } from "ethers";
+import { Contract, ethers } from "ethers";
 
 // Create the context with default values
 const Web3Context = createContext<any>({
@@ -8,6 +8,9 @@ const Web3Context = createContext<any>({
   disconnect: () => {},
   account: undefined,
   connected: false,
+  tokens: [],
+  borrow: () => {},
+  repayLoan: () => {},
 });
 
 // Custom hook to use the Web3 context
@@ -45,10 +48,11 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
       "function tokenURI(uint256 tokenId) public view returns (string memory)",
       "function tokensURI() public view returns (string)",
     ];
-    const boredApeClubContract = new ethers.Contract("0x55de1ef7868bd0ad56e7709403af1860f4a823a9", abi, signer);
+    const boredApeClubContractAddress: string = "0x55de1ef7868bd0ad56e7709403af1860f4a823a9";
+    const boredApeClubContract: Contract = new ethers.Contract(boredApeClubContractAddress, abi, signer);
 
     // Retrieve the baseURI of the collection
-    let baseURI = await boredApeClubContract.tokensURI();
+    let baseURI: string = await boredApeClubContract.tokensURI();
 
     // Use a dedicated Infura IPFS Gateway to retrieve the IPFS content
     // Note: This should be replaced with the customer's dedicated IPFS gateway
@@ -56,21 +60,73 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
     baseURI = dedicatedIpfsGateway.concat(baseURI);
 
     // Get the first 3 tokens to showcase to the user how to retrieve the NFTs
-    const tokens = await Promise.all(
-      Array.from({ length: 3 }, async (_, index) => {
-        const tokenURI = baseURI.concat("/", index + 1, ".json");
+    const tokens: Array<object> = await Promise.all(
+      Array.from({ length: 3 }, async (_, index: number) => {
+        const tokenURI = baseURI.concat("/", (index + 1).toString(), ".json");
         const response = await fetch(tokenURI);
         const metadata = await response.json();
 
         let token = {
           ...metadata,
+          id: index + 1,
           image: metadata.image.replace("ipfs://", dedicatedIpfsGateway),
+          contractAddress: boredApeClubContractAddress,
         };
         return token;
       })
     );
 
     setTokens(tokens);
+  };
+
+  const borrow = async (contractAddress: string, tokenId: number) => {
+    // @ts-ignore
+    const ethersProvider = new ethers.providers.Web3Provider(provider);
+    const signer = ethersProvider.getSigner(account);
+
+    // Set-up the LendifyProtocol contract ABI deployed on Linea
+    const abi = ["function borrow(address contractAddress, uint256 tokenId) external"];
+    const lendifyProtocolContract = new ethers.Contract(
+      process.env.NEXT_PUBLIC_LENDIFYPROTOCOL_CONTRACT_ADDRESS!,
+      abi,
+      signer
+    );
+
+    const transaction = await lendifyProtocolContract.borrow(contractAddress, tokenId);
+    await transaction.wait();
+  };
+
+  const repayLoan = async (contractAddress: string, tokenId: number) => {
+    // @ts-ignore
+    const ethersProvider = new ethers.providers.Web3Provider(provider);
+    const signer = ethersProvider.getSigner(account);
+
+    // Set-up the LendifyProtocol contract ABI deployed on Linea
+    const abi = [
+      "function repayLoan(address contractAddress, uint256 tokenId) external",
+      "function fixedLoan() public view returns (uint256)",
+    ];
+    const lendifyProtocolContract = new ethers.Contract(
+      process.env.NEXT_PUBLIC_LENDIFYPROTOCOL_CONTRACT_ADDRESS!,
+      abi,
+      signer
+    );
+
+    // Set-up the USDC contract to approve the loan amount to be transferred by the LendifyProtocol
+    // Reference: https://lineascan.build/token/0x176211869cA2b568f2A7D4EE941E073a821EE1ff
+    const abiUSDC = ["function approve(address spender, uint256 value) external returns (bool)"];
+    const USDCContract = new ethers.Contract("0x176211869cA2b568f2A7D4EE941E073a821EE1ff", abiUSDC, signer);
+
+    // Get the fixed loan amount from required by the LendifyProtocol
+    const fixedLoan = await lendifyProtocolContract.fixedLoan();
+
+    // Approve the LendifyProtocol to transfer the fixed loan from the borrower
+    let transaction = await USDCContract.approve(process.env.NEXT_PUBLIC_LENDIFYPROTOCOL_CONTRACT_ADDRESS, fixedLoan);
+    await transaction.wait();
+
+    // Finally, repay the loan and get back the NFT
+    transaction = await lendifyProtocolContract.repayLoan(contractAddress, tokenId);
+    await transaction.wait();
   };
 
   useEffect(() => {
@@ -87,6 +143,8 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
         account,
         connected,
         tokens,
+        borrow,
+        repayLoan,
       }}
     >
       {children}

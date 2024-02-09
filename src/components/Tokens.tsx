@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { Button } from "./ui/button";
 
 export default function Tokens({ tokens }: any) {
@@ -16,16 +15,17 @@ export default function Tokens({ tokens }: any) {
       </div>
       <div className="mt-4 flex justify-between">
         <div>
-          <Link href={`/dashboard/memory/${token.token_id}`}>
-            <h3 className="text-lg font-medium text-gray-900">
-              <span aria-hidden="true" className="absolute inset-0" />
-              {token.name}
-            </h3>
-          </Link>
+          <h3 className="text-lg font-medium text-gray-900">
+            <span aria-hidden="true" className="absolute inset-0" />
+            {token.name}
+          </h3>
         </div>
         <p className="text-sm font-medium text-gray-900">
-          <Button size="sm">Lend</Button>
+          <Button size="sm">Borrow</Button>
         </p>
+      </div>
+      <div>
+        <p className="text-sm font-medium text-gray-700">Click borrow to collateralize this NFT</p>
       </div>
     </div>
   ));

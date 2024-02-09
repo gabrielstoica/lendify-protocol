@@ -15,16 +15,12 @@ export const useMetamask = () => useContext(Web3Context);
 
 // Provider component to wrap around components that need access to the context
 export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
-  const [account, setAccount] = useState<string>();
   const [tokens, setTokens] = useState<Array<object>>();
-  const { sdk, connected, connecting, provider, chainId } = useSDK();
+  const { sdk, connected, connecting, provider, chainId, account } = useSDK();
 
   const connect = async () => {
     try {
-      const accounts = await sdk?.connect();
-      console.log(accounts);
-      // @ts-ignore
-      setAccount(accounts?.[0]);
+      await sdk?.connect();
     } catch (err) {
       console.warn(`failed to connect..`, err);
     }
@@ -78,15 +74,10 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
-    if (connected) {
-      if (!account) {
-        // reconnect to get the accounts
-        connect();
-      }
-
+    if (connected && account) {
       getUserNFTs();
     }
-  }, [connected]);
+  }, [connected, account]);
 
   return (
     <Web3Context.Provider

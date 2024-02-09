@@ -28,3 +28,13 @@ $ forge script script/Deploy.s.sol --broadcast --verify --rpc-url linea-testnet
 forge build
 forge test
 ```
+
+It's highly recommended to properly test your smart contracts before going live. By using the [Diligence suite](https://consensys.io/diligence/), you're ensuring the highest level of security throughout the development and deployment processes. The suite is meticulously designed to mitigate risks, conduct thorough audits, and uphold industry best practices, providing you with a robust foundation for your blockchain projects:
+
+- [Scribble](https://github.com/Consensys/scribble) - a Solidity runtime verification tool for property based testing
+- [Mythril](https://github.com/Consensys/mythril) - a security analysis tool for EVM bytecode.
+- [Solidity Metrics](https://github.com/ConsenSys/vscode-solidity-metrics) - generate Source Code Metrics, Complexity and Risk profile reports for projects written in Solidity.
+
+```
+forge test
+```

@@ -19,13 +19,24 @@ export const useMetamask = () => useContext(Web3Context);
 // Provider component to wrap around components that need access to the context
 export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
   const [tokens, setTokens] = useState<Array<object>>();
+  const [response, setResponse] = useState<unknown>("");
   const { sdk, connected, connecting, provider, chainId, account } = useSDK();
+
+  // Helper methods
 
   const connect = async () => {
     try {
       await sdk?.connect();
     } catch (err) {
       console.warn(`failed to connect..`, err);
+    }
+  };
+
+  const disconnect = () => {
+    try {
+      sdk?.disconnect();
+    } catch (err) {
+      console.warn(`failed to disconnect..`, err);
     }
   };
 
@@ -42,13 +53,36 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const disconnect = () => {
+  const connectAndSign = async () => {
     try {
-      sdk?.disconnect();
+      const signResult = await sdk?.connectAndSign({
+        msg: "Connect + Sign message",
+      });
+      setResponse(signResult);
     } catch (err) {
-      console.warn(`failed to disconnect..`, err);
+      console.warn(`failed to connect..`, err);
     }
   };
+
+  const readOnlyCalls = async () => {
+    if (!sdk?.hasReadOnlyRPCCalls() && !provider) {
+      setResponse("readOnlyCalls are not set and provider is not set. Please set your infuraAPIKey in the SDK Options");
+      return;
+    }
+    try {
+      const result = await provider?.request({
+        method: "eth_blockNumber",
+        params: [],
+      });
+      const gotFrom = sdk?.hasReadOnlyRPCCalls() ? "infura" : "MetaMask provider";
+      setResponse(`(${gotFrom}) ${result}`);
+    } catch (e) {
+      console.log(`error getting the blockNumber`, e);
+      setResponse("error getting the blockNumber");
+    }
+  };
+
+  // Platform related methods
 
   const getUserNFTs = async () => {
     // @ts-ignore

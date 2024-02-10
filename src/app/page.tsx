@@ -6,7 +6,7 @@ import { UserNav } from "@/components/UserNav";
 import { Tokens } from "@/components/Tokens";
 
 export default function Home() {
-  const { connect, connected, tokens } = useMetamask();
+  const { connect, connected, connecting, tokens } = useMetamask();
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -20,7 +20,8 @@ export default function Home() {
         </div>
       </div>
 
-      {!connected ? "Please connect to see your NFTs" : tokens ? <Tokens tokens={tokens} /> : "Loading tokens..."}
+      {!connected ? "Please connect to see your NFTs" : connecting ? "Connecting..." : null}
+      {connected && tokens ? <Tokens tokens={tokens} /> : "Loading tokens..."}
 
       <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
         <a

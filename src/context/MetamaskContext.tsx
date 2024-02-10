@@ -199,6 +199,7 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
         tokens,
         borrow,
         repayLoan,
+        connecting,
       }}
     >
       {children}

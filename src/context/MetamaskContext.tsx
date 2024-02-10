@@ -56,7 +56,7 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
   const connectAndSign = async () => {
     try {
       const signResult = await sdk?.connectAndSign({
-        msg: "Connect + Sign message",
+        msg: "Welcome to LendifyProtocol!\nPlease sign this message to access the platform.",
       });
       setResponse(signResult);
     } catch (err) {
@@ -200,6 +200,7 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
         borrow,
         repayLoan,
         connecting,
+        connectAndSign,
       }}
     >
       {children}

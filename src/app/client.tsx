@@ -10,7 +10,7 @@ const ClientLayout: FC<PropsWithChildren<{}>> = ({ children }) => {
       debug={false}
       sdkOptions={{
         dappMetadata: {
-          name: "NFT-Lending App",
+          name: "LendifyProtocol App",
           url: window.location.host,
         },
         // Use Infura API to make read-only JSON-RPC requests

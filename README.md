@@ -1,4 +1,4 @@
-## LendifyProtocol
+## LendifyProtocol Demo
 
 A simple lending & borrowing protocol where end-users can collateralize NFTs to borrow a fixed USDC loan amount.
 

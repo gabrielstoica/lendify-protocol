@@ -29,6 +29,19 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const changeNetwork = async (hexChainId: string) => {
+    console.log(`switching to network chainId=${hexChainId}`);
+    try {
+      const response = await provider?.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: hexChainId }], // chainId must be in hexadecimal numbers
+      });
+      console.log(`response`, response);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const disconnect = () => {
     try {
       sdk?.disconnect();
@@ -134,6 +147,13 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
       getUserNFTs();
     }
   }, [connected, account]);
+
+  // Enforce Linea Mainnet for our use case
+  useEffect(() => {
+    if (chainId && chainId !== "0xe708") {
+      changeNetwork("0xe708");
+    }
+  }, [chainId]);
 
   return (
     <Web3Context.Provider

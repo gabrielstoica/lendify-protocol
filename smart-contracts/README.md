@@ -19,7 +19,7 @@ Note: To deploy on either Linea Mainnet or Linea Goerli testnet, you will need a
 Similarly, to verify the `LendifyProtocol` smart contract on `Lineascan`, you need an API key. You can get an API key from [here](https://lineascan.build/) - for both Linea Mainnet and Goerli testnet by creating an account. Once you have it, assign it to the `LINEA_EXPLORER_API_KEY` variable in the `.env` file.
 
 ```shell
-$ forge script script/Deploy.s.sol --broadcast --verify --rpc-url linea-testnet
+$ forge script script/Deploy.s.sol --broadcast --verify --rpc-url linea_goerli
 ```
 
 ### Build and Test

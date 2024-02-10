@@ -21,7 +21,7 @@ export default function Home() {
       </div>
 
       {!connected ? "Please connect to see your NFTs" : connecting ? "Connecting..." : null}
-      {connected && tokens ? <Tokens tokens={tokens} /> : "Loading tokens..."}
+      {connected ? tokens ? <Tokens tokens={tokens} /> : "Loading tokens..." : null}
 
       <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
         <a

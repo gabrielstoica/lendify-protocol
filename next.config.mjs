@@ -6,6 +6,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "reneum.infura-ipfs.io",
       },
+      {
+        protocol: "https",
+        hostname: "ipfs.io",
+      },
     ],
   },
 };

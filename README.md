@@ -12,6 +12,7 @@ Create a `.env` file using the `.env.example` file provided in this folder and u
 
 - `NEXT_PUBLIC_INFURA_DEDICATED_IPFS_GATEWAY` is an optional dedicated IPFS gateway to retrieve the NFTs metadata. To learn more please follow [this link](https://docs.infura.io/api/networks/ipfs/how-to/access-ipfs-content/dedicated-gateways).
 - `NEXT_PUBLIC_INFURA_API_KEY` is mandatory to make API calls through the MetaMask SDK. To learn more please follow [this guide](https://docs.infura.io/api/getting-started).
+- `NEXT_PUBLIC_INFURA_API_SECRET` is mandatory if you want to make requests through the Infura NFT API endpoints. To learn more please follow [this guide](https://docs.infura.io/dashboard/create-api).
 - `NEXT_PUBLIC_LENDIFYPROTOCOL_CONTRACT_ADDRESS` is the smart contract address used by the platform to perform the lending & borrowing features. Learn how to deploy to Linea by reading the [smart-contracts/README.md](smart-contracts/README.md).
 
 ## Getting Started

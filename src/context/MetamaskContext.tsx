@@ -55,6 +55,8 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
 
   const connectAndSign = async () => {
     try {
+      // In a production environment implement a SIWE mechanism
+      // See https://docs.metamask.io/wallet/how-to/sign-data/siwe/#example
       const signResult = await sdk?.connectAndSign({
         msg: "Welcome to LendifyProtocol!\nPlease sign this message to access the platform.",
       });
@@ -103,25 +105,35 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
 
     // Use a dedicated Infura IPFS Gateway to retrieve the IPFS content
     // Note: This should be replaced with the customer's dedicated IPFS gateway
-    const dedicatedIpfsGateway = process.env.NEXT_PUBLIC_INFURA_DEDICATED_IPFS_GATEWAY || "ipfs.io/ipfs/";
-    baseURI = dedicatedIpfsGateway.concat(baseURI);
+    const ipfsGateway = process.env.NEXT_PUBLIC_INFURA_DEDICATED_IPFS_GATEWAY || "https://ipfs.io/ipfs/";
+    baseURI = ipfsGateway.concat(baseURI);
 
     // Get the first 3 tokens to showcase to the user how to retrieve the NFTs
     const tokens: Array<object> = await Promise.all(
       Array.from({ length: 3 }, async (_, index: number) => {
-        const tokenURI = baseURI.concat("/", (index + 1).toString(), ".json");
+        const tokenURI = baseURI.concat("/", (++index).toString(), ".json");
         const response = await fetch(tokenURI);
         const metadata = await response.json();
 
         let token = {
           ...metadata,
-          id: index + 1,
-          image: metadata.image.replace("ipfs://", dedicatedIpfsGateway),
+          id: ++index,
+          image: metadata.image.replace("ipfs://", ipfsGateway),
           contractAddress: boredApeClubContractAddress,
         };
         return token;
       })
     );
+
+    // Alternatively, use the Infura NFT API to retrieve the user's NFTs
+    // See https://docs.api.infura.io/nft/
+    /* const baseUrl = "https://nft.api.infura.io";
+    const url = `${baseUrl}/networks/${chainId}/accounts/${account}/assets/nfts`;
+    const response = await fetch(url, {
+      headers: { Authorization: `Basic ${btoa(INFURA_API_KEY + ":" + INFURA_API_SECRET)}` },
+    });
+    const data = await response.json();
+    const tokens = data["data"]["assets"]; */
 
     setTokens(tokens);
   };

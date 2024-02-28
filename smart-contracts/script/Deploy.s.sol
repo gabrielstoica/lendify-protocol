@@ -2,7 +2,7 @@
 pragma solidity ^0.8.20;
 
 import {BaseScript} from "./Base.s.sol";
-import {LendifyProtocol} from "src/LendifyProtocol.sol";
+import {LendifyProtocol} from "../src/LendifyProtocol.sol";
 
 /// @notice Deploys the LendifyProtocol smart contract
 contract DeployLendifyProtocol is BaseScript {

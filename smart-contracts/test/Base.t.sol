@@ -3,7 +3,7 @@ pragma solidity ^0.8.20;
 
 import {Events} from "./utils/Events.sol";
 import {Users} from "./utils/Types.sol";
-import {LendifyProtocol} from "src/LendifyProtocol.sol";
+import {LendifyProtocol} from "../src/LendifyProtocol.sol";
 import "forge-std/Test.sol";
 
 abstract contract Base_Test is Test, Events {

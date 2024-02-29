@@ -3,6 +3,7 @@ pragma solidity ^0.8.20;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import {IERC721Receiver} from "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 
 /// @notice Simple contract that manages NFT lending and borrowing - it distributes a fixed amount
 /// of USDC once an NFT is deposited into the contract
@@ -10,7 +11,7 @@ import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 /// Note: This is not a production-ready contract!
 ///
 /// In the real world, a proper Price Feed should be used to retrieve the NFT floor price, see https://docs.chain.link/data-feeds/nft-floor-price/
-contract LendifyProtocol {
+contract LendifyProtocol is IERC721Receiver{
     /// @dev Use a fixed loan amount to lend to the borrowers
     uint256 public fixedLoan;
 
@@ -84,5 +85,10 @@ contract LendifyProtocol {
 
         // Interactions: repay the loan
         IERC20(USDC).transferFrom(msg.sender, address(this), fixedLoan);
+    }
+
+    /// @inheritdoc IERC721Receiver
+    function onERC721Received(address, address, uint256, bytes calldata) external pure returns (bytes4) {
+        return IERC721Receiver.onERC721Received.selector;
     }
 }

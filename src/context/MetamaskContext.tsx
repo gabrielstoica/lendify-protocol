@@ -144,14 +144,19 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
     const signer = ethersProvider.getSigner(account);
 
     // Set-up the LendifyProtocol contract ABI deployed on Linea
-    const abi = ["function borrow(address contractAddress, uint256 tokenId) external"];
-    const lendifyProtocolContract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_LENDIFYPROTOCOL_CONTRACT_ADDRESS!,
-      abi,
-      signer
-    );
+    const abi = [
+      "function borrow(address contractAddress, uint256 tokenId) external",
+      "function approve(address to, uint256 tokenId) external",
+    ];
+    const lendifyProtcolContractAddress = process.env.NEXT_PUBLIC_LENDIFYPROTOCOL_CONTRACT_ADDRESS;
+    const lendifyProtocolContract = new ethers.Contract(lendifyProtcolContractAddress!, abi, signer);
 
-    const transaction = await lendifyProtocolContract.borrow(contractAddress, tokenId);
+    // Approve the LendifyProtocol to transfer the ERC721 token
+    let transaction = await lendifyProtocolContract.approve(lendifyProtcolContractAddress, tokenId);
+    await transaction.wait();
+
+    // Finally, lend the ERC721 token to receive the fixed USDC loan
+    transaction = await lendifyProtocolContract.borrow(contractAddress, tokenId);
     await transaction.wait();
   };
 

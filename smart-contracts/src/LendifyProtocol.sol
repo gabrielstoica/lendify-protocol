@@ -85,6 +85,12 @@ contract LendifyProtocol is IERC721Receiver{
 
         // Interactions: repay the loan
         IERC20(USDC).transferFrom(msg.sender, address(this), fixedLoan);
+ 
+        // Interactions: transfer the NFT back to its owner
+        IERC721(contractAddress).safeTransferFrom(address(this), msg.sender, tokenId);
+
+        // Emit the repayed loan event
+        emit LoanRepayed(msg.sender, contractAddress, tokenId);
     }
 
     /// @inheritdoc IERC721Receiver
